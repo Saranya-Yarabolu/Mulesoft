@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="round-robinFlow" doc:id="00ed8e2f-8686-4d5a-aa26-fae635594bf4" >
+		<scheduler doc:name="Scheduler" doc:id="ef8e0170-82a9-4881-860d-aee571711a63" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="10" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Start" doc:id="d2d3428b-e137-4378-bea6-2f3b2d6acc1a" message="Flow initiated"/>
+		<round-robin doc:name="Round Robin" doc:id="64836a4c-88c4-47da-83dd-9f942e50344e" >
+			<route >
+				<set-variable value="Student-1" doc:name="Student 1" doc:id="3602fe89-a9da-48fd-b4b1-b37c8320a111" variableName="name"/>
+				<logger level="INFO" doc:name="Logger" doc:id="1e1429ac-e232-487f-8d80-e6962bc5d3bd" message="#[vars.name]"/>
+			</route>
+			<route >
+				<set-variable value="Student-2" doc:name="Student2" doc:id="ea8f33d0-9445-4022-9518-fc237fc0bdd1" variableName="name"/>
+				<logger level="INFO" doc:name="Logger" doc:id="fd68d2cb-59e3-42ad-81e5-510cfe9b74d1" message="#[vars.name]"/>
+			</route>
+			<route >
+				<set-variable value="Student-3" doc:name="Student3" doc:id="f523918a-2751-4da7-acfa-251f1a2f60bd" variableName="name"/>
+				<logger level="INFO" doc:name="Logger" doc:id="45aca38f-0719-4f60-b089-f810b6603bb4" message="#[vars.name]"/>
+			</route>
+			<route >
+				<set-variable value="Student-4" doc:name="Student4" doc:id="c7730fd4-e61b-4803-a753-bbf9e41274f2" variableName="name"/>
+				<logger level="INFO" doc:name="Logger" doc:id="c198246b-6ec1-4054-a143-bf20c5a63ed4" message="#[vars.name]"/>
+			</route>
+		</round-robin>
+		<logger level="INFO" doc:name="Logger" doc:id="84655196-b208-46a8-9234-2c8377525295" message='#[vars.name ++ " needs to present today"]'/>
+		<logger level="INFO" doc:name="End" doc:id="d11af836-817b-47ac-a881-1d7a2e0129b7" message="Flow ended"/>
+	</flow>
+</mule>
