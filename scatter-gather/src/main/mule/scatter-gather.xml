@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="eda70463-9b43-41c4-931d-2e1dd53ab716" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="scatter-gatherFlow" doc:id="9e40d959-58a9-42ee-9ca1-6bee08610ee4" >
+		<http:listener doc:name="Listener" doc:id="4fea5d3d-a380-49bc-9fc2-5151a0cc4140" config-ref="HTTP_Listener_config" path="/scatterGather"/>
+		<logger level="INFO" doc:name="Start" doc:id="a7c81a0c-2d7b-4881-8321-c2ffe1f49514" message="Flow Initiated"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="d7ae73e3-33f9-4687-a1ee-dc405608ab9a" >
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="0366c189-d9f7-4a09-9715-c4027737ae9c" message="Passing to Student1"/>
+				<flow-ref doc:name="student1" doc:id="1899132e-95a8-4dd2-a69c-19bd9c396e4d" name="student1"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="fb482040-bad3-493a-a283-36c4755bb3df" message="Passing to Student2"/>
+				<flow-ref doc:name="student2" doc:id="5a66e3e4-4b2f-489b-a645-47758cb7a0ed" name="student2"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="afdfb911-0620-4882-93a3-3472409fc7da" message="Passing to Student3"/>
+				<flow-ref doc:name="student3" doc:id="750d4fb4-78f7-400a-96d3-b361df949b53" name="student3"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger" doc:id="59a31633-8f6c-4502-b883-9dcb85df91b1" message="Passing to Student4"/>
+				<flow-ref doc:name="student4" doc:id="a14f6ba1-26cf-4fe2-bccb-66f55a0b3ed0" name="student4"/>
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Transform Message" doc:id="044605c8-4f03-42eb-8e72-86154d542588" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="33da6191-6fd7-47df-abbd-d1238e326e89" message="Flow ended"/>
+	</flow>
+	<sub-flow name="student1" doc:id="1e681845-282a-4cba-9ef6-4a18860b7c79" >
+		<logger level="INFO" doc:name="Logger" doc:id="be21ce8c-fbbb-4533-9c6c-1d5ba376bfd2" />
+		<ee:transform doc:name="Transform Message" doc:id="bb5c39bc-b5bb-4876-a5e3-e66c9445e236" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ID": "A12D",
+	"name": "Paxton",
+	"Dept": "Arts"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="student2" doc:id="6e56ec80-044b-4ec0-aef2-ec45ef010fb7" >
+		<logger level="INFO" doc:name="Logger" doc:id="329799d3-91fe-45ed-b34b-7f727409d513" />
+		<ee:transform doc:name="Transform Message" doc:id="42537de1-dfe9-4f54-be83-e5b1c10f9f5c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ID": "A89F",
+	"name": "Archie",
+	"Dept": "Arts"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="student3" doc:id="b0c6c35c-99b3-4e5c-921f-b7d6ea8f9ba0" >
+		<logger level="INFO" doc:name="Logger" doc:id="19df71bb-d346-4eb4-97c0-ec9f4e370f7e" />
+		<ee:transform doc:name="Transform Message" doc:id="38df5de8-8984-4305-84e1-aae54690732b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ID": "A67H",
+	"name": "Kevin",
+	"Dept": "Arts"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="student4" doc:id="e1bacba9-8425-487e-a46a-191668051b96" >
+		<logger level="INFO" doc:name="Logger" doc:id="6ee4262b-e19c-4172-a073-9efa04a6e848" />
+		<ee:transform doc:name="Transform Message" doc:id="1516b480-43bd-4b2a-a862-d83790ff6fa2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ID": "A45B",
+	"name": "Sarah",
+	"Dept": "Arts"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>
