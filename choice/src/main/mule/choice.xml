@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="123f723e-1237-4a19-a4e2-51eb066b46bb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="choiceFlow" doc:id="fc3e6b25-0aad-40e8-98bd-54af59c12ab7" >
+		<http:listener doc:name="Listener" doc:id="0f807b03-9a29-4520-9d33-431f8b4a51d0" config-ref="HTTP_Listener_config" path="/choice"/>
+		<logger level="INFO" doc:name="Start" doc:id="8ef1a85a-1fb3-4ee4-b94a-bb1491074c74" message="initiated the flow"/>
+		<set-variable value="NeverHaveIEver" doc:name="whatToWatch?" doc:id="c9ee289c-1cc8-416f-909c-169acfa1b886" variableName="whatToWatch?"/>
+		<choice doc:name="Choice" doc:id="01e668d5-e4a9-482a-82b9-a88ec53219da" >
+			<when expression='#[vars."whatToWatch?" == "Scoop"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="69ab5898-cfe4-40e4-9f95-c47e5a68dc74" message='We suggest you to watch "Scoop"'/>
+			</when>
+			<when expression='#[vars."whatToWatch?" == "NeverHaveIEver"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="d1a6927e-5b8d-40ad-a2f3-fe69ed13e70e" message='We suggest you to watch "Never Have I Ever"'/>
+			</when>
+			<when expression='#[vars."whatToWatch?" == "TheNightAgent"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="dd8d3195-01be-4d84-bf27-1d2220a807ec" message='We suggest you to watch "The Night Agent"'/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="51530a43-b015-4e42-9335-de91344a2b3f" message="We suggest you to the latest releases"/>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform Message" doc:id="dceed32f-c273-40a6-86b6-10e7e7511cf0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Suggestion": "DONE"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="a0349ba8-ab7e-4ae3-9a58-b87669fb3a13" message="flow ended"/>
+	</flow>
+</mule>
