@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit-proj1-test-suite.xml" />
+	<munit:after-suite name="munit-proj1-test-suiteAfter_Suite" doc:id="c9e4eac7-5a6b-4028-8fe6-68a2ef701a01" >
+		<logger level="INFO" doc:name="Logger" doc:id="c29355da-0d75-4f80-a911-411b2ff06e86" message='#["After suit"]'/>
+	</munit:after-suite>
+	<munit:after-test name="munit-proj1-test-suiteAfter_Test" doc:id="4a31d2d7-3d36-4bec-a65b-fafe43d5298c" >
+		<logger level="INFO" doc:name="Logger" doc:id="daac8dff-1316-4e07-b88e-5b68dba5c908" message='#["After test"]'/>
+	</munit:after-test>
+	<munit:before-suite name="munit-proj1-test-suiteBefore_Suite" doc:id="ee89df05-a476-4b02-95c1-116cd01f924e" >
+		<logger level="INFO" doc:name="Logger" doc:id="6ab5fae7-ecba-4d4d-a200-d77f320457c3" message='#["Before suit"]'/>
+	</munit:before-suite>
+	<munit:before-test name="munit-proj1-test-suiteBefore_Test" doc:id="6851acf1-d06b-4d6a-bcfa-e5300b83e6c9" >
+		<logger level="INFO" doc:name="Logger" doc:id="18517cfe-abee-4a49-a8e0-6b959bc03629" message='#["Before test"]'/>
+	</munit:before-test>
+	<munit:test name="munit-proj1-test-suite-munit-proj1FlowTest" doc:id="76941db3-ccfa-47a8-ba0b-42b456ac690d" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="713eee16-d95f-4859-b36c-06cd170990d2" processor="ftp:copy">
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[payload]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="8d79225f-ecb1-45e8-9eea-736fb717dab5" processor="ftp:copy">
+				<munit-tools:before-call >
+					<logger level="INFO" doc:name="Logger" doc:id="50fa7b84-9aca-4c44-b7e6-c711feec0718" message='#["Before call"]'/>
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<logger level="INFO" doc:name="Logger" doc:id="e192a0e8-50f7-4830-8cd7-ef0aa3456ee5" message='#["After call"]'/>
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to munit-proj1Flow" doc:id="82106547-3324-4397-95bc-4c2961ee3165" name="munit-proj1Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1d030776-99f2-4276-9033-0d731631e4ef" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

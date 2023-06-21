@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="68d7cfd7-86ce-46fd-b25f-c1a8f155d667" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<ftp:config name="FTP_Config" doc:name="FTP Config" doc:id="2c5cc605-ae60-4073-9a2e-82efa88de6a6" >
+		<ftp:connection workingDir="c:/output" host="localhost" />
+	</ftp:config>
+	<flow name="munit-proj1Flow" doc:id="6636b655-3440-4fd6-9f96-1103a73426d8" >
+		<http:listener doc:name="http" doc:id="5a45e74e-678f-4fcd-9732-b1d3fac07180" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value='#["firsttest"]' doc:name="Set Payload" doc:id="880f09cf-4001-4061-a64d-474e49c00f4f" />
+		<ftp:copy doc:id="0d9c3e9d-d030-429a-a834-5aa3492ecab1" config-ref="FTP_Config" sourcePath="c:/output" targetPath="c:/in"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0d3e6905-f37e-438e-81f1-dfc6bea5cce5" />
+	</flow>
+</mule>
