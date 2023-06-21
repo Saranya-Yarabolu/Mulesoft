@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4e06dfc9-8019-4b99-978f-10860d2bc66c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="a69b0cad-3d84-443a-bae5-3bf2c4b6a271">
+		<http:request-connection host="localhost" port="8089" />
+	</http:request-config>
+	<flow name="first-successfulFlow" doc:id="73502240-5d1d-4a31-bcd5-5d1c12e53b94" >
+		<http:listener doc:name="Listener" doc:id="baf989e9-89e9-4243-a94c-c77095fb222f" config-ref="HTTP_Listener_config" path="/firstSuccessful"/>
+		<logger level="INFO" doc:name="Start" doc:id="e1b0f6fb-e538-48db-93dc-28b95f5122e5" message="Flow Initiated"/>
+		<ee:transform doc:name="Transform Message" doc:id="bb5533b4-c89f-45c4-8d1c-841d9f3afedc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ID" : "DENH567J",
+	"Full Name" : "Ian Somerhalder",
+	"Profession" : "Actor"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<first-successful doc:name="First Successful" doc:id="cbf271d3-f3e2-4663-a858-8c9b0d4b4ca0" >
+			<route >
+				<set-variable value="something" doc:name="Set Variable" doc:id="7c4d31b6-5c40-4d8f-9b25-9f1a677e4462" variableName="something"/>
+				<logger level="INFO" doc:name="Logger" doc:id="02da3599-af22-4c7a-905b-296e60e4130a" message="#[vars.something]"/>
+				<http:request method="GET" doc:name="Request" doc:id="3ad49838-a96c-48aa-bb8b-cf98d01a2891" config-ref="HTTP_Request_configuration" path="/demo"/>
+				<logger level="INFO" doc:name="Logger" doc:id="c07918d3-621a-4f17-b7ab-85f5c3859e1b" message="Route1 is executed"/>
+			</route>
+			<route >
+				<set-variable value='#[payload."Full Name"]' doc:name="Full Name" doc:id="52a7a4e8-e16d-4b39-879d-54862f2a5262" variableName="Full Name"/>
+				<logger level="INFO" doc:name="Logger" doc:id="b95bbac0-0a44-478a-b7c4-c5c1cc187563" message='#[vars."Full Name"]'/>
+				<logger level="INFO" doc:name="Logger" doc:id="1b546597-a1e3-4318-8eda-bf9d95c3c05e" message="Route2 is executed"/>
+			</route>
+			<route >
+				<set-variable value="#[payload.Profession]" doc:name="Profession" doc:id="b39046a1-cdcd-4a42-a23c-a55415b2edcd" variableName="Profession"/>
+				<logger level="INFO" doc:name="Logger" doc:id="42367cdf-8ef5-455f-8f7c-843feabda7f7" message="#[vars.Profession]"/>
+				<logger level="INFO" doc:name="Logger" doc:id="2a3e1a22-a18c-4300-9b67-64e92f6dc3af" message="Route3 is executed"/>
+			</route>
+		</first-successful>
+		<logger level="INFO" doc:name="End" doc:id="3e28a6f4-211b-4f23-b401-1edfea740823" message="Flow Ended"/>
+	</flow>
+</mule>
