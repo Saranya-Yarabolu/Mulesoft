@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="implementation-test-suite.xml" />
+	<munit:test name="implementation-test-suite-getAccountsTest" doc:id="280d3532-8218-4f35-ac9a-080da124492a" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="DB Select" doc:id="b9ea3aef-a28d-4dbf-af13-1e5ce9064bae" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Select" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="28b340c0-c1e8-4ae5-a31e-31daabe40f75" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- read(MunitTools::getResourceAsString("mocks/mock-accounts.json"), "application/json")]' mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAccounts" doc:id="04e59720-bc50-4780-adba-a7a844e5a9f1" name="getAccounts"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="is payload an array" doc:id="a346496d-1a3e-406e-b7a0-c6ab8617e208" actual="#[typeOf(payload)]" expected='#["Array"]' message="Payload is NOT an array"/>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="e3d85a0f-c5b7-4b55-8ffd-2b3d072cc741" actual="#[sizeOf( keysOf(payload[0]) )]" expected="#[4]" message="payload keys are NOT matching with expected "/>
+			<munit-tools:assert-equals doc:name="Payload should be JSON" doc:id="ea573347-f48f-437d-8d57-33e3d23717fc" actual="#[payload.^mediaType]" expected='#["application/json; charset=UTF-8"]' message="Payload is NOT in JSON format"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
