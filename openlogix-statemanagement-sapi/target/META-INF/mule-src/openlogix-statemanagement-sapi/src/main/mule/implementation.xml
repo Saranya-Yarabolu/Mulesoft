@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="startFlow" doc:id="0894b4e4-966d-4889-9a4f-0a33d56723e5" >
+		<logger level="INFO" doc:name="Start" doc:id="da83b638-3cd8-436c-a9fb-0c6b1274aa51" message="Started"/>
+		<os:retrieve doc:name="Retrieve" doc:id="6e1354f3-c78c-455d-87e3-b25f445240c7" key="current" objectStore="Object_store">
+			<os:default-value ><![CDATA[start]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice" doc:id="b3220cec-1c98-475d-9efa-d601adba648c" >
+			<when expression='#[payload == "lock"]'>
+				<os:store doc:name="current=start" doc:id="6f48b52f-4a68-45f8-acce-86693f04c016" key="current" objectStore="Object_store">
+					<os:value ><![CDATA[#["start"]]]></os:value>
+				</os:store>
+			</when>
+		</choice>
+		<os:retrieve doc:name="Retrieve" doc:id="9e5a08f1-6d74-44ab-a94a-49a45b7296cd" key="current" objectStore="Object_store">
+			<os:default-value ><![CDATA[start]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="6e57f1e7-d97f-40c8-a2a9-5c0430c773b3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="6ae3e8f3-99f6-41d4-9a5a-8d8e17fa2bb3" message="Ended"/>
+	</flow>
+	<flow name="processFlow" doc:id="7f28cf03-01e5-486f-aea3-0ae1738e1af2">
+		<logger level="INFO" doc:name="Start" doc:id="78f61be3-224f-4f39-b301-7cd1ec23976f" message="Started" />
+		<os:retrieve doc:name="Retrieve" doc:id="5390776a-86d9-4a52-98e5-53f3c22ec62a" key="current" objectStore="Object_store">
+			<os:default-value ><![CDATA[process]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice" doc:id="e195fde5-7cdb-4e5b-bdc2-580b6886dedb" >
+			<when expression='#[payload == "start"]' >
+				<os:store doc:name="current=process" doc:id="37503a2d-0a61-4925-ad41-62dd5b47cd3b" key="current" objectStore="Object_store" >
+					<os:value ><![CDATA[#["process"]]]></os:value>
+				</os:store>
+			</when>
+		</choice>
+		<os:retrieve doc:name="Retrieve" doc:id="0d3db7de-1314-4f75-9196-4d8ac45b5fd9" key="current" objectStore="Object_store" >
+			<os:default-value ><![CDATA[process]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="075249fd-a1ed-4dbb-a126-1dbff868b2f5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="a14e7036-90f3-4fef-8489-9bb783de4ff0" message="Ended" />
+	</flow>
+	<flow name="lockFlow" doc:id="cf391743-a47c-4b21-baad-889df9529a7a" >
+		<logger level="INFO" doc:name="Start" doc:id="d026592e-e21b-4eaf-9fde-14b68b57312c" message="Started" />
+		<os:retrieve doc:name="Retrieve" doc:id="e2f59281-d24c-488f-9fb8-9571035765a1" key="current" objectStore="Object_store" >
+			<os:default-value ><![CDATA[lock]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice" doc:id="f6fcdd1b-5e3f-4244-ae70-164dc9330ba5" >
+			<when expression='#[payload == "process"]' >
+				<os:store doc:name="current=lock" doc:id="6b33b7f3-96bb-4405-a763-5434896d4782" key="current" objectStore="Object_store" >
+					<os:value ><![CDATA[#["lock"]]]></os:value>
+				</os:store>
+			</when>
+		</choice>
+		<os:retrieve doc:name="Retrieve" doc:id="483a3a89-ed6c-45a5-be78-90f0455a29d9" key="current" objectStore="Object_store" >
+			<os:default-value ><![CDATA[lock]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="8907329a-e317-4f23-b1df-f651f10f2562" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="4cb8ed3f-397f-41f1-a6b3-f91c4b7c305c" message="Ended" />
+	</flow>
+</mule>

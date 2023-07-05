@@ -1,0 +1,11 @@
+default:
+  initial-retrieve: "lock"
+  store: "lock"
+  after-store: "lock"
+  output: "lock"
+
+lock:
+  initial-retrieve: "process"
+  store: "lock"
+  after-store: "lock"
+  output: "lock"

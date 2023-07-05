@@ -1,0 +1,12 @@
+default:
+  initial-retrieve: "start"
+  store: "start"
+  after-store: "start"
+  output: "start"
+
+start:
+  initial-retrieve: "lock"
+  store: "start"
+  after-store: "start"
+  output: "start"
+

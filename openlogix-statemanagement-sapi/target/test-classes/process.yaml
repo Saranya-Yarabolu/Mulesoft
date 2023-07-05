@@ -1,0 +1,11 @@
+default:
+  initial-retrieve: "process"
+  store: "process"
+  after-store: "process"
+  output: "process"
+
+process:
+  initial-retrieve: "start"
+  store: "process"
+  after-store: "process"
+  output: "process"

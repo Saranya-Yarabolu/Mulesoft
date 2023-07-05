@@ -1,0 +1,7 @@
+%dw 2.0
+
+type auto_cf391743_a47c_4b21_baad_889df9529a7a_Output_Payload = {
+  status: "process" | "start" | "lock", 
+  _?: Any
+}
+

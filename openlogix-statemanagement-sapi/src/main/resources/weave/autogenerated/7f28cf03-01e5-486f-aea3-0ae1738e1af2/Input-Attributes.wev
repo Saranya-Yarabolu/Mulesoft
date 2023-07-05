@@ -1,0 +1,23 @@
+%dw 2.0
+
+type auto_7f28cf03_01e5_486f_aea3_0ae1738e1af2_Input_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {| env: "uat-api" | "api" | "qa-api" | "dev-api" |}, 
+  version: String, 
+  localAddress: String
+|}
+
